@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Position;
 import chess.pieces.King;
@@ -12,6 +15,9 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
     private Board board;
+    
+    private List<ChessPiece> piecesOnTheBoard = new ArrayList<>();
+    private List<ChessPiece> capturedPieces = new ArrayList<>();
 
     // Construtor que inicializa o tabuleiro e define as peças iniciais
     public ChessMatch() {
@@ -90,12 +96,17 @@ public class ChessMatch {
         ChessPiece p = (ChessPiece) board.removePiece(source);
         ChessPiece capturedPiece = (ChessPiece) board.removePiece(target);
         board.placePiece(p, target);
+        if (capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
         return capturedPiece;
     }
 
     // Coloca uma nova peça no tabuleiro
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
+        piecesOnTheBoard.add(piece);
     }
 
     // Configuração inicial do tabuleiro de xadrez
